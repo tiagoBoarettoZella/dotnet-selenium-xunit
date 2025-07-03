@@ -17,7 +17,7 @@ namespace TesteWeb.Tests
         {
             new object[] { "chromium", "tiago.torre_geral@h", "senhaErrada", false },
             new object[] { "chromium", "usuario.invalido@teste.com", "123456", false },
-            new object[] { "chromium", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
+            new object[] { "chromium", "tiago.torre_geral@h", "Rf@c6h12o6h3po4x", true },
             new object[] { "firefox", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
             new object[] { "webkit", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true }
         };
