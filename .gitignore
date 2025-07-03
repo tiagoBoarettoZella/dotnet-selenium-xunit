@@ -1,0 +1,21 @@
+# .NET build folders
+bin/
+obj/
+
+# Visual Studio
+*.user
+*.suo
+.vscode/
+.idea/
+*.csproj.user
+
+# Playwright: relatórios e screenshots
+playwright-report/
+screenshots/
+
+# Logs
+*.log
+
+# OS system files
+.DS_Store
+Thumbs.db
