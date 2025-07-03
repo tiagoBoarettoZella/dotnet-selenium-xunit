@@ -25,10 +25,16 @@ jobs:
         node-version: '18'
 
     - name: 📦 Instalar Playwright
+      run: dotnet add ./TesteWeb/TesteWeb.csproj package Microsoft.Playwright
+
+    - name: 🛠️ Build do projeto
+      run: dotnet build ./TesteWeb/TesteWeb.csproj
+
+    - name: 📥 Instalar navegadores do Playwright
       run: |
+        export PATH=\"$PATH:/home/runner/.dotnet/tools\"
         dotnet tool install --global Microsoft.Playwright.CLI
-        export PATH="$PATH:/home/runner/.dotnet/tools"
-        playwright install --with-deps
+        playwright install --with-deps            
 
     - name: 🔧 Restaurar dependências
       run: dotnet restore
