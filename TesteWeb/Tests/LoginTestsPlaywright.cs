@@ -1,5 +1,3 @@
-//LoginTestsPlaywright.cs
-//------------------------
 using Microsoft.Playwright;
 using System;
 using System.IO;
