@@ -12,7 +12,7 @@ namespace Tests
         [Theory]
         [InlineData("tiago.torre_geral@h", "senhaErrada", false)]
         [InlineData("usuario.invalido@teste.com", "123456", false)]
-        [InlineData("tiago.torre_geral@h", "Rf@c6h12o6h3po4", true)]
+        [InlineData("tiago.torre_geral@h", "Rf@c6h12o6h3po4x", true)]
         public async Task TestarLogin(string usuario, string senha, bool deveLogar)
         {
             using var playwright = await Playwright.CreateAsync();
