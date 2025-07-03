@@ -1,4 +1,4 @@
-name: CI - Testes Playwright
+name: CI - Testes Playwright (.NET + multi-browser)
 
 on:
   push:
@@ -24,23 +24,27 @@ jobs:
       with:
         node-version: '18'
 
-    - name: 📦 Instalar Playwright
-      run: dotnet add ./TesteWeb/TesteWeb.csproj package Microsoft.Playwright
+    - name: 📦 Adicionar pacotes necessários
+      run: |
+        dotnet add ./TesteWeb/TesteWeb.csproj package Microsoft.Playwright
+        dotnet add ./TesteWeb/TesteWeb.csproj package Xunit.SkippableFact
 
     - name: 🛠️ Build do projeto
       run: dotnet build ./TesteWeb/TesteWeb.csproj
 
     - name: 📥 Instalar navegadores do Playwright
       run: |
-        export PATH=\"$PATH:/home/runner/.dotnet/tools\"
+        export PATH="$PATH:/home/runner/.dotnet/tools"
         dotnet tool install --global Microsoft.Playwright.CLI
-        playwright install --with-deps            
+        playwright install --with-deps
 
-    - name: 🔧 Restaurar dependências
-      run: dotnet restore
+    - name: 🧪 Executar testes com xUnit
+      run: dotnet test ./TesteWeb/TesteWeb.csproj --no-build --logger "trx;LogFileName=test-results.trx"
 
-    - name: 🛠️ Build
-      run: dotnet build --no-restore
-
-    - name: 🧪 Rodar testes
-      run: dotnet test --no-build --logger \"console;verbosity=detailed\"
+    - name: 📤 Upload de screenshots (caso existam)
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: screenshots
+        path: TesteWeb/screenshots
+        if-no-files-found: ignore

@@ -1,22 +1,42 @@
+//LoginTestsPlaywright.cs
+//------------------------
 using Microsoft.Playwright;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
+//using Xunit.SkippableFact;
 using Tests.Pages;
 
-namespace Tests
+namespace TesteWeb.Tests
 {
     public class LoginTestsPlaywright
     {
-        [Theory]
-        [InlineData("tiago.torre_geral@h", "senhaErrada", false)]
-        [InlineData("usuario.invalido@teste.com", "123456", false)]
-        [InlineData("tiago.torre_geral@h", "Rf@c6h12o6h3po4x", true)]
-        public async Task TestarLogin(string usuario, string senha, bool deveLogar)
+        public static IEnumerable<object[]> CasosLogin => new List<object[]>
         {
+            new object[] { "chromium", "tiago.torre_geral@h", "senhaErrada", false },
+            new object[] { "chromium", "usuario.invalido@teste.com", "123456", false },
+            new object[] { "chromium", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
+            new object[] { "firefox", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
+            new object[] { "webkit", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true }
+        };
+
+        [SkippableTheory]
+        [MemberData(nameof(CasosLogin))]
+        public async Task TestarLogin(string navegador, string usuario, string senha, bool deveLogar)
+        {
+            Skip.If(navegador == "webkit" && OperatingSystem.IsLinux(), "WebKit não suportado em Linux no CI.");
+
             using var playwright = await Playwright.CreateAsync();
-            var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true });
+            IBrowser browser = navegador switch
+            {
+                "chromium" => await playwright.Chromium.LaunchAsync(new() { Headless = true }),
+                "firefox" => await playwright.Firefox.LaunchAsync(new() { Headless = true }),
+                "webkit" => await playwright.Webkit.LaunchAsync(new() { Headless = true }),
+                _ => throw new ArgumentException("Navegador inválido")
+            };
+
             var context = await browser.NewContextAsync();
             var page = await context.NewPageAsync();
 
@@ -42,9 +62,9 @@ namespace Tests
             catch (Exception ex)
             {
                 Directory.CreateDirectory("screenshots");
-                string fileName = $"screenshots/erro-login-{DateTime.Now:yyyyMMdd-HHmmss}.png";
+                string fileName = $"screenshots/erro-{navegador}-{DateTime.Now:yyyyMMdd-HHmmss}.png";
                 await page.ScreenshotAsync(new() { Path = fileName, FullPage = true });
-                throw new Exception($"Erro no teste de login. Screenshot: {fileName}", ex);
+                throw new Exception($"Erro no teste de login ({navegador}). Screenshot: {fileName}", ex);
             }
         }
     }
