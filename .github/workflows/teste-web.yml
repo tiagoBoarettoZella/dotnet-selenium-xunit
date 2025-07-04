@@ -38,8 +38,11 @@ jobs:
         dotnet tool install --global Microsoft.Playwright.CLI
         playwright install --with-deps
 
-    - name: 🧪 Executar testes com xUnit
-      run: dotnet test ./TesteWeb/TesteWeb.csproj --no-build --logger "trx;LogFileName=test-results.trx"
+    - name: ✅ Rodar testes de login
+      run: dotnet test --filter "FullyQualifiedName~TesteLoginWeb.Tests.LoginTests" --logger "console;verbosity=detailed"
+
+    - name: ✅ Rodar testes da home
+      run: dotnet test --filter "FullyQualifiedName~TestHomeWeb.Tests.HomeTests" --logger:"console;verbosity=detailed"
 
     - name: 📤 Upload de screenshots (caso existam)
       if: always()
