@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Tests.Pages;
 
-namespace TestHomeeWeb.Tests
+namespace TestHomeWeb.Tests
 {
     public class HomeTests
     {

@@ -42,7 +42,7 @@ jobs:
       run: dotnet test --filter "FullyQualifiedName~TesteLoginWeb.Tests.LoginTests" --logger "console;verbosity=detailed"
 
     - name: ✅ Rodar testes da home
-      run: dotnet test --filter "FullyQualifiedName~TesteLoginWeb.Tests.HomeTests" --logger "console;verbosity=detailed"
+      run: dotnet test --filter "FullyQualifiedName~TestHomeWeb.Tests.HomeTests" --logger:"console;verbosity=detailed"
 
     - name: 📤 Upload de screenshots (caso existam)
       if: always()
