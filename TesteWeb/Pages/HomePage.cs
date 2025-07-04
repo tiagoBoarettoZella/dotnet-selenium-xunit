@@ -24,5 +24,37 @@ namespace Tests.Pages
             await _page.WaitForSelectorAsync("button[ptooltip='Sair']");
             Assert.True(await _page.IsVisibleAsync("button[ptooltip='Sair']"));
         }
+
+        public async Task ValidarMenuLateralAsync()
+        {
+            // Valida a barra lateral visível
+            var sidebar = await _page.QuerySelectorAsync(".layout-sidebar");
+            Assert.NotNull(sidebar);
+            Assert.True(await sidebar.IsVisibleAsync());
+
+            // Valida avatar e nome do usuário
+            var nomeUsuario = await _page.InnerTextAsync("app-menu-profile strong");
+            var cargo = await _page.InnerTextAsync("app-menu-profile small");
+
+            Assert.Equal("Tiago torre_geral", nomeUsuario.Trim());
+            Assert.Equal("Administrador(a)", cargo.Trim());
+
+            // Valida alguns itens de menu principais
+            var itensMenu = new[]
+            {
+                "Dashboard",
+                "Organização",
+                "Logística",
+                "Transporte",
+                "Configuração"
+            };
+
+            foreach (var texto in itensMenu)
+            {
+                var item = await _page.QuerySelectorAsync($"span.layout-menuitem-text:text-is(\"{texto}\")");
+                Assert.NotNull(item);
+                Assert.True(await item.IsVisibleAsync());
+            }
+        }
     }
 }

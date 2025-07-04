@@ -17,11 +17,10 @@ namespace TesteWeb.Tests
         {
             new object[] { "chromium", "tiago.torre_geral@h", "senhaErrada", false },
             new object[] { "chromium", "usuario.invalido@teste.com", "123456", false },
-            new object[] { "chromium", "tiago.torre_geral@h", "Rf@c6h12o6h3po4x", true },
+            new object[] { "chromium", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
             new object[] { "firefox", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true },
             new object[] { "webkit", "tiago.torre_geral@h", "Rf@c6h12o6h3po4", true }
         };
-
         [SkippableTheory]
         [MemberData(nameof(CasosLogin))]
         public async Task TestarLogin(string navegador, string usuario, string senha, bool deveLogar)
@@ -74,6 +73,7 @@ namespace TesteWeb.Tests
         [Fact]
         public async Task DeveValidarCamposDaHome()
         {
+            Console.WriteLine("🏠 Página home carregada");
             using var playwright = await Playwright.CreateAsync();
             var browser = await playwright.Chromium.LaunchAsync(new() { Headless = true });
             var context = await browser.NewContextAsync();
